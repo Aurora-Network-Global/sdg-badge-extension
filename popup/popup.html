@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Badge Settings</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <div class="popup-header">
+            <img src="../icons/icon48.png" alt="SDG Badge" class="popup-icon">
+            <h1>SDG Badge Settings</h1>
+        </div>
+        
+        <div class="popup-content">
+            <div class="setting-group">
+                <label for="mode-toggle" class="setting-label">
+                    <span class="label-text">Analysis Mode</span>
+                    <span class="mode-indicator" id="mode-indicator">Page Content</span>
+                </label>
+                <div class="toggle-container">
+                    <input type="checkbox" id="mode-toggle" class="toggle-input">
+                    <label for="mode-toggle" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <div class="toggle-options">
+                        <span class="option-text">Page</span>
+                        <span class="option-text">Select</span>
+                    </div>
+                </div>
+                <p class="helper-text">Choose between analyzing full page content or selected text</p>
+            </div>
+
+            <div class="setting-group">
+                <label for="size-slider" class="setting-label">
+                    <span class="label-text">Badge Size</span>
+                    <span class="size-value" id="size-value">250px</span>
+                </label>
+                <div class="slider-container">
+                    <input type="range" id="size-slider" class="size-slider" min="150" max="400" value="250">
+                    <div class="slider-track">
+                        <div class="slider-progress"></div>
+                    </div>
+                </div>
+                <p class="helper-text">Adjust the size of the SDG badge widget</p>
+            </div>
+
+            <div class="setting-group">
+                <button id="test-api" class="test-button">
+                    <span class="button-icon">🔍</span>
+                    Test API Connection
+                </button>
+                <div id="api-status" class="api-status"></div>
+            </div>
+        </div>
+
+        <div class="popup-footer">
+            <p class="attribution">
+                Powered by <a href="https://aurora-sdg.labs.vu.nl/" target="_blank">Aurora SDG</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
