@@ -91,7 +91,10 @@ class SDGBadgeWidget {
         `;
 
         // Add event listeners
-        this.widget.querySelector('.sdg-widget-close').addEventListener('click', () => {
+        this.widget.querySelector('.sdg-widget-close').addEventListener('click', (e) => {
+            console.log('Close button clicked');
+            e.preventDefault();
+            e.stopPropagation();
             this.hideWidget();
         });
 
@@ -284,25 +287,22 @@ class SDGBadgeWidget {
         const content = this.widget?.querySelector('.sdg-widget-content');
         if (!content) return;
 
-        if (data.sdgGoal && data.sdgGoal !== 'No Classification') {
-            // Create SDG badge display
-            const confidencePercentage = Math.round(data.score * 100);
+        if (data.predictions && data.predictions.length > 0) {
+            // Create official SDG wheel widget
+            const sdgWheelDiv = document.createElement('div');
+            sdgWheelDiv.className = 'sdg-wheel';
+            sdgWheelDiv.setAttribute('data-text', this.lastAnalyzedText || this.selectedText);
+            sdgWheelDiv.setAttribute('data-model', 'aurora-sdg-multi');
+            sdgWheelDiv.setAttribute('data-wheel-height', this.badgeSize - 20);
             
-            content.innerHTML = `
-                <div class="sdg-badge-container">
-                    <div class="sdg-badge-display">
-                        <div class="sdg-goal-number">${data.sdgGoal}</div>
-                        <div class="sdg-confidence">
-                            <div class="confidence-label">Confidence</div>
-                            <div class="confidence-value">${confidencePercentage}%</div>
-                        </div>
-                        ${data.iconUrl ? `<img src="${data.iconUrl}" alt="SDG ${data.sdgGoal}" class="sdg-icon">` : ''}
-                    </div>
-                </div>
-            `;
+            // Attach the data to the element for the widget to use
+            sdgWheelDiv.sdgData = data;
             
-            // Add CSS for the badge display
-            this.addBadgeStyles();
+            content.innerHTML = '';
+            content.appendChild(sdgWheelDiv);
+            
+            // Load and execute the official widget script
+            this.loadOfficialWidget();
         } else {
             content.innerHTML = `
                 <div class="sdg-widget-error">
@@ -310,6 +310,19 @@ class SDGBadgeWidget {
                     <div class="error-text">No SDG classification found</div>
                 </div>
             `;
+        }
+    }
+
+    loadOfficialWidget() {
+        // Load the official widget script if not already loaded
+        if (!window.sdgWidgetLoaded) {
+            const script = document.createElement('script');
+            script.src = chrome.runtime.getURL('scripts/widget.js');
+            script.onload = () => {
+                window.sdgWidgetLoaded = true;
+                console.log('Official SDG widget loaded');
+            };
+            document.head.appendChild(script);
         }
     }
 
@@ -393,9 +406,11 @@ class SDGBadgeWidget {
     }
 
     hideWidget() {
+        console.log('hideWidget called');
         if (this.widget) {
             this.widget.style.display = 'none';
             this.isVisible = false;
+            console.log('Widget hidden');
         }
     }
 }

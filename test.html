@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Widget Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .sdg-wheel {
+            margin: 20px auto;
+            display: block;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-text {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>SDG Widget Test Page</h1>
+        
+        <div class="test-text">
+            <p><strong>Test Text:</strong> This is a test about sustainable development goals, renewable energy, and climate action. We need to work towards clean energy solutions and environmental protection to achieve the sustainable development goals.</p>
+        </div>
+        
+        <div class="sdg-wheel" 
+             data-text="This is a test about sustainable development goals, renewable energy, and climate action. We need to work towards clean energy solutions and environmental protection to achieve the sustainable development goals."
+             data-model="aurora-sdg-multi"
+             data-wheel-height="300">
+        </div>
+        
+        <p><em>This test page demonstrates the SDG widget functionality. The widget should display a circular chart with SDG classifications based on the text content.</em></p>
+    </div>
+    
+    <script src="scripts/widget.js"></script>
+</body>
+</html>

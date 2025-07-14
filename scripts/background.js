@@ -103,44 +103,64 @@ async function handleTestApi(text, sendResponse) {
 // Process API response to create widget data
 function processApiResponse(apiData) {
     try {
-        // Extract predictions from API response
-        const predictions = apiData.predictions || [];
-        
-        // Find the highest scoring prediction
-        let topPrediction = null;
-        let maxScore = 0;
-        
-        predictions.forEach(prediction => {
-            if (prediction.prediction_score > maxScore) {
-                maxScore = prediction.prediction_score;
-                topPrediction = prediction;
-            }
-        });
-
-        if (topPrediction) {
+        // Return the raw API response with proper format for the official widget
+        // The official widget expects: predictions array with prediction, sdg.code, sdg.name
+        if (apiData.predictions && apiData.predictions.length > 0) {
+            // Transform the API response to match the widget's expected format
+            const formattedPredictions = apiData.predictions.map((pred, index) => {
+                return {
+                    prediction: pred.prediction || pred.prediction_score || 0,
+                    sdg: {
+                        code: index + 1, // SDG codes are 1-17
+                        name: getSDGName(index + 1)
+                    }
+                };
+            });
+            
             return {
-                sdgGoal: topPrediction.sdg_goal,
-                score: topPrediction.prediction_score,
-                iconUrl: topPrediction.icon_url,
-                predictions: predictions
+                predictions: formattedPredictions,
+                model: 'aurora-sdg-multi',
+                text: apiData.text || ''
             };
         } else {
             return {
-                sdgGoal: 'No Classification',
-                score: 0,
-                iconUrl: null,
-                predictions: []
+                predictions: [],
+                model: 'aurora-sdg-multi',
+                text: apiData.text || ''
             };
         }
     } catch (error) {
         console.error('Error processing API response:', error);
         return {
-            sdgGoal: 'Processing Error',
-            score: 0,
-            iconUrl: null,
-            predictions: []
+            predictions: [],
+            model: 'aurora-sdg-multi',
+            text: ''
         };
     }
+}
+
+// Helper function to get SDG names
+function getSDGName(sdgCode) {
+    const sdgNames = {
+        1: 'No poverty',
+        2: 'Zero hunger',
+        3: 'Good health and well-being',
+        4: 'Quality Education',
+        5: 'Gender equality',
+        6: 'Clean water and sanitation',
+        7: 'Affordable and clean energy',
+        8: 'Decent work and economic growth',
+        9: 'Industry, innovation and infrastructure',
+        10: 'Reduced inequalities',
+        11: 'Sustainable cities and communities',
+        12: 'Responsible consumption and production',
+        13: 'Climate action',
+        14: 'Life below water',
+        15: 'Life in Land',
+        16: 'Peace, Justice and strong institutions',
+        17: 'Partnerships for the goals'
+    };
+    return sdgNames[sdgCode] || 'Unknown SDG';
 }
 
 // Initialize extension
