@@ -8,7 +8,8 @@
     "activeTab",
     "storage",
     "scripting",
-    "sidePanel"
+    "sidePanel",
+    "tabs"
   ],
   "host_permissions": [
     "https://aurora-sdg.labs.vu.nl/*",

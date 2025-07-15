@@ -246,8 +246,7 @@
                   }
                 }
               ]
-            })
-          });
+            });
         } // End of processSDGData function
       });
     });

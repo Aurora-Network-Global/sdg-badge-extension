@@ -90,11 +90,12 @@ class SDGBadgeWidget {
                 this.showWidget();
             }
         } else if (this.viewMode === 'sidebar') {
-            // Hide floating widget and open sidebar
+            // Hide floating widget - sidebar will be opened by user clicking extension icon
             if (this.widget) {
                 this.hideWidget();
             }
-            this.openSidebar();
+            // Note: Sidebar is now opened by clicking the extension icon, not automatically
+            console.log('Sidebar mode active - click extension icon to open sidebar');
         } else {
             // Hide floating widget for popup mode
             if (this.widget) {
@@ -477,12 +478,9 @@ class SDGBadgeWidget {
     }
 
     openSidebar() {
-        // Send message to background script to open sidebar
-        if (typeof chrome !== 'undefined' && chrome.runtime) {
-            chrome.runtime.sendMessage({
-                action: 'openSidebar'
-            });
-        }
+        // Sidebar is now opened by clicking the extension icon (user gesture)
+        // This method is kept for compatibility but no longer sends messages
+        console.log('Sidebar will open when user clicks extension icon');
     }
 }
 

@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Notify content script
         sendToActiveTab({ action: 'updateViewMode', viewMode: viewMode });
+        
+        // If sidebar mode is selected, open the sidebar
+        if (viewMode === 'sidebar') {
+            openSidebarFromPopup();
+        }
     });
 
     // Mode toggle event listener
@@ -225,5 +230,24 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             apiStatus.classList.remove('show');
         }, 3000);
+    }
+    
+    // Open sidebar from popup (provides user gesture)
+    function openSidebarFromPopup() {
+        if (typeof chrome !== 'undefined' && chrome.tabs) {
+            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                if (tabs[0]) {
+                    chrome.runtime.sendMessage({
+                        action: 'openSidebarFromPopup',
+                        tabId: tabs[0].id
+                    });
+                    
+                    // Close popup after opening sidebar
+                    setTimeout(() => {
+                        window.close();
+                    }, 100);
+                }
+            });
+        }
     }
 });

@@ -64,10 +64,16 @@ if (typeof chrome !== 'undefined' && chrome.runtime) {
         } else if (request.action === 'testApi') {
             handleTestApi(request.text, sendResponse);
             return true;
-        } else if (request.action === 'openSidebar') {
-            handleOpenSidebar(sender.tab.id);
-        } else if (request.action === 'closeSidebar') {
-            handleCloseSidebar(sender.tab.id);
+        } else if (request.action === 'getViewMode') {
+            // Send current view mode to content script
+            chrome.storage.sync.get(['viewMode'], function(result) {
+                sendResponse({ viewMode: result.viewMode || 'popup' });
+            });
+            return true;
+        } else if (request.action === 'openSidebarFromPopup') {
+            // Handle sidebar opening from popup (provides user gesture)
+            handleOpenSidebar(request.tabId);
+            return true;
         }
     });
 }
@@ -104,7 +110,9 @@ async function handleTestApi(text, sendResponse) {
     }
 }
 
-// Handle opening sidebar
+
+
+// Handle opening sidebar (now only called from user gesture)
 async function handleOpenSidebar(tabId) {
     try {
         if (typeof chrome !== 'undefined' && chrome.sidePanel) {
