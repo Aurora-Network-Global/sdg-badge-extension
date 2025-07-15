@@ -1,53 +1,87 @@
-.description {
+/* SDG Extension Widget Styles - Namespaced to prevent interference with webpage */
+.sdg-badge-widget .description,
+.sdg-badge-container .description {
   font-size: large;
   text-align:center;
 }
 
-h1 {
+.sdg-badge-widget h1,
+.sdg-badge-container h1 {
   text-align: center;
 }
 
-h2 {
+.sdg-badge-widget h2,
+.sdg-badge-container h2 {
   text-align: left;
 }
 
-.centered {
+.sdg-badge-widget .centered,
+.sdg-badge-container .centered {
   text-align: center;
 }
 
-.results-heading {
+.sdg-badge-widget .results-heading,
+.sdg-badge-container .results-heading {
   color: #00E9BC!important;
   margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
 }
 
-.sdg-wheel {
+.sdg-badge-widget .sdg-wheel,
+.sdg-badge-container .sdg-wheel,
+.popup-analysis .sdg-wheel,
+.sidebar-analysis .sdg-wheel {
   position: relative;
 }
 
-.sdg-wheel:hover + .sdg-legend {
+.sdg-badge-widget .sdg-wheel:hover + .sdg-legend,
+.sdg-badge-container .sdg-wheel:hover + .sdg-legend,
+.popup-analysis .sdg-wheel:hover + .sdg-legend,
+.sidebar-analysis .sdg-wheel:hover + .sdg-legend {
   opacity: 1;
   background-color: white;
   color: black;
 }
 
-.sdg-description {
+.sdg-badge-widget .sdg-description,
+.sdg-badge-container .sdg-description {
   display: none;
   width: 200px;
   height: 100px;
 }
 
-.sdg-legend {
+.sdg-badge-widget .sdg-legend,
+.sdg-badge-container .sdg-legend {
   border-radius: 20px;
   position: absolute;
   left: 100px;
   bottom: 0;
   background: rgb(0, 0, 0);
   background: rgba(0, 0, 0, 0.8); /* Black see-through */
-  width: 400px;
+  width: 300px; /* Reduced from 400px to fit in popup */
   transition: .5s ease;
   color: white;
   font-size: 14px;
   padding: 10px;
+}
+
+/* Popup-specific legend positioning */
+.popup-analysis .sdg-legend {
+  border-radius: 20px;
+  position: absolute;
+  left: 50px; /* Adjusted for popup */
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.8); /* Black see-through */
+  width: 320px; /* Fits within 420px popup width */
+  transition: .5s ease;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* Sidebar-specific legend positioning - Let sidebar.css handle styling */
+.sidebar-analysis .sdg-legend {
+  /* Remove conflicting styles - let sidebar.css handle sidebar legend styling */
 }

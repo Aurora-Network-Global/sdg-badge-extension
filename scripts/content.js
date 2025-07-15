@@ -19,6 +19,7 @@ class SDGBadgeWidget {
     init() {
         this.loadSettings();
         this.setupEventListeners();
+        this.injectCSSIsolation();
         
         // Initial analysis after page load
         setTimeout(() => {
@@ -130,12 +131,15 @@ class SDGBadgeWidget {
         `;
 
         // Add event listeners
-        this.widget.querySelector('.sdg-widget-close').addEventListener('click', (e) => {
-            console.log('Close button clicked');
-            e.preventDefault();
-            e.stopPropagation();
-            this.hideWidget();
-        });
+        const closeButton = this.widget.querySelector('.sdg-widget-close');
+        if (closeButton) {
+            closeButton.addEventListener('click', (e) => {
+                console.log('Close button clicked');
+                e.preventDefault();
+                e.stopPropagation();
+                this.hideWidget();
+            });
+        }
 
         // Make widget draggable
         this.makeDraggable();
@@ -332,21 +336,29 @@ class SDGBadgeWidget {
             if (!content) return;
 
             if (data.predictions && data.predictions.length > 0) {
-                // Create official SDG wheel widget
-                const sdgWheelDiv = document.createElement('div');
-                sdgWheelDiv.className = 'sdg-wheel';
-                sdgWheelDiv.setAttribute('data-text', this.lastAnalyzedText || this.selectedText);
-                sdgWheelDiv.setAttribute('data-model', 'aurora-sdg-multi');
-                sdgWheelDiv.setAttribute('data-wheel-height', this.badgeSize - 20);
+                // Create a simple SDG display instead of complex widget
+                const sdgDisplay = document.createElement('div');
+                sdgDisplay.className = 'sdg-badge-display';
                 
-                // Attach the data to the element for the widget to use
-                sdgWheelDiv.sdgData = data;
+                // Get the top prediction
+                const topPrediction = data.predictions[0];
+                const confidence = Math.round(topPrediction.prediction * 100);
+                
+                sdgDisplay.innerHTML = `
+                    <div class="sdg-goal-number">SDG ${topPrediction.sdg.code}</div>
+                    <div class="sdg-confidence">
+                        <div class="confidence-label">Confidence</div>
+                        <div class="confidence-value">${confidence}%</div>
+                    </div>
+                    <img src="${chrome.runtime.getURL('assets/img/sdg_icon_' + topPrediction.sdg.code + '.png')}" 
+                         alt="SDG ${topPrediction.sdg.code}" class="sdg-icon">
+                `;
                 
                 content.innerHTML = '';
-                content.appendChild(sdgWheelDiv);
+                content.appendChild(sdgDisplay);
                 
-                // Load and execute the official widget script
-                this.loadOfficialWidget();
+                // Add styles for the display
+                this.addBadgeStyles();
             } else {
                 content.innerHTML = `
                     <div class="sdg-widget-error">
@@ -481,6 +493,54 @@ class SDGBadgeWidget {
         // Sidebar is now opened by clicking the extension icon (user gesture)
         // This method is kept for compatibility but no longer sends messages
         console.log('Sidebar will open when user clicks extension icon');
+    }
+
+    injectCSSIsolation() {
+        // Inject CSS to prevent extension styles from affecting the webpage
+        if (document.querySelector('#sdg-extension-css-isolation')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'sdg-extension-css-isolation';
+        style.textContent = `
+            /* Reset any potential global styles from extension */
+            body:not(.sdg-extension-context) h1,
+            body:not(.sdg-extension-context) h2,
+            body:not(.sdg-extension-context) .description,
+            body:not(.sdg-extension-context) .centered,
+            body:not(.sdg-extension-context) .results-heading {
+                /* Reset to browser defaults */
+                all: revert;
+            }
+            
+            /* Ensure extension widgets have proper isolation */
+            .sdg-badge-widget {
+                all: initial;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 999999;
+                width: 250px;
+                height: 250px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 50%;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                cursor: move;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            
+            .sdg-badge-widget * {
+                font-family: inherit;
+            }
+        `;
+        
+        document.head.appendChild(style);
     }
 }
 

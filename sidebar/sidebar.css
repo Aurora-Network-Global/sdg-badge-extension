@@ -261,12 +261,15 @@ body {
     background: #f8f9fa !important;
     border-radius: 8px;
     width: auto !important;
+    color: #212529 !important; /* Ensure dark text */
+    border: 1px solid #e9ecef;
 }
 
 .sdg-legend h3 {
     margin: 0 0 8px 0;
     font-size: 14px;
-    color: #212529;
+    color: #212529 !important;
+    font-weight: 600;
 }
 
 .sdg-legend ul {
@@ -281,4 +284,19 @@ body {
     background: white;
     border-radius: 6px;
     border: 1px solid #e9ecef;
+    color: #212529 !important; /* Ensure dark text for list items */
+}
+
+.sdg-legend p {
+    margin: 0;
+    color: #212529 !important; /* Ensure dark text for paragraphs */
+}
+
+.sdg-legend a {
+    color: #007bff !important; /* Blue color for links */
+    text-decoration: none;
+}
+
+.sdg-legend a:hover {
+    text-decoration: underline;
 }

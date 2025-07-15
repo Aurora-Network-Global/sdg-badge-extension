@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Badge Extension - UI Fixes Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .centered {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .test-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+        }
+        
+        .results-heading {
+            color: #28a745;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .sdg-content {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .test-content {
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SDG Badge Extension - UI Fixes Test Page</h1>
+        
+        <div class="description">
+            This test page verifies that all 4 UI issues have been fixed in the SDG Badge extension.
+            Load the extension in Chrome/Edge developer mode and test each functionality.
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 1: CSS Interference Fix</h2>
+            <div class="test-instructions">
+                <strong>Expected:</strong> This webpage should display normally without any layout issues.
+                The extension's CSS should not affect the webpage's appearance.
+            </div>
+            <div class="test-content">
+                <p>Check that:</p>
+                <ul>
+                    <li>Headings (h1, h2) are styled correctly</li>
+                    <li>Text content is properly aligned</li>
+                    <li>Page layout is not compressed or narrowed</li>
+                    <li>All styles appear as intended</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Popup Width Fix</h2>
+            <div class="test-instructions">
+                <strong>Instructions:</strong> Click the extension icon to open the popup. 
+                Select 'Popup' mode and hover over the SDG analysis.
+            </div>
+            <div class="test-content">
+                <p>Check that:</p>
+                <ul>
+                    <li>Popup window is wider (420px instead of 300px)</li>
+                    <li>"Top 3 SDG classifications" hover content fits properly</li>
+                    <li>No content is cut off or truncated</li>
+                    <li>All UI elements are fully visible</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 3: Floating Mode Fix</h2>
+            <div class="test-instructions">
+                <strong>Instructions:</strong> In the popup, change to 'Floating Widget' mode.
+                Check that the floating widget displays results.
+            </div>
+            <div class="test-content">
+                <p>Check that:</p>
+                <ul>
+                    <li>Shows SDG analysis results instead of "analyzing content..."</li>
+                    <li>Displays the top SDG goal, confidence percentage, and icon</li>
+                    <li>Close (×) button works properly</li>
+                    <li>Widget is draggable and responsive</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 4: Sidebar Text Visibility Fix</h2>
+            <div class="test-instructions">
+                <strong>Instructions:</strong> In the popup, change to 'Sidebar Panel' mode.
+                This will open the sidebar with SDG analysis.
+            </div>
+            <div class="test-content">
+                <p>Check that:</p>
+                <ul>
+                    <li>"Top 3 SDG classifications" text is clearly visible</li>
+                    <li>Dark text on light background (good contrast)</li>
+                    <li>No white text on white background issues</li>
+                    <li>All legend content is readable</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="sdg-content">
+            <h2>Sample SDG Content for Testing</h2>
+            <div class="results-heading">Sustainable Development Goals Content</div>
+            <p class="centered">This section contains content related to various SDGs for testing the extension's analysis capabilities.</p>
+            
+            <div class="test-content">
+                <p>
+                    <span class="highlight">Climate Action:</span> Climate change is one of the most pressing challenges of our time. 
+                    Urgent action is needed to combat climate change and its impacts through mitigation and adaptation strategies.
+                </p>
+                
+                <p>
+                    <span class="highlight">Quality Education:</span> Education is a fundamental human right and essential for achieving sustainable development. 
+                    Ensuring inclusive and equitable quality education for all is crucial for building peaceful and prosperous societies.
+                </p>
+                
+                <p>
+                    <span class="highlight">Clean Water and Sanitation:</span> Access to clean water and sanitation is essential for human health and dignity. 
+                    Universal access to safe and affordable drinking water and adequate sanitation facilities is a basic human need.
+                </p>
+                
+                <p>
+                    <span class="highlight">Responsible Consumption:</span> Sustainable consumption and production patterns are essential for achieving sustainable development. 
+                    We need to ensure sustainable consumption and production patterns that minimize environmental impact.
+                </p>
+            </div>
+        </div>
+        
+        <div class="centered">
+            <h2>Extension Testing Instructions</h2>
+            <ol style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li>Load the extension in Chrome/Edge developer mode</li>
+                <li>Navigate to chrome://extensions/</li>
+                <li>Click "Load unpacked" and select the extension directory</li>
+                <li>Return to this page and test each mode</li>
+                <li>Verify all UI issues are resolved</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
