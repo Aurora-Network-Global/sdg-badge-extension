@@ -118,31 +118,42 @@ class SDGBadgeWidget {
             this.widget.remove();
         }
 
+        // Create the widget container that will hold the official SDG wheel
         this.widget = document.createElement('div');
         this.widget.className = 'sdg-badge-widget';
         this.widget.style.width = this.badgeSize + 'px';
         this.widget.style.height = this.badgeSize + 'px';
-        this.widget.innerHTML = `
-            <button class="sdg-widget-close" title="Close SDG Badge">×</button>
-            <div class="sdg-widget-content">
-                <div class="sdg-widget-loading">
-                    <div class="sdg-loading-spinner"></div>
-                    <div class="sdg-loading-text">Analyzing content...</div>
-                </div>
+        
+        // Add close button
+        const closeButton = document.createElement('button');
+        closeButton.className = 'sdg-widget-close';
+        closeButton.title = 'Close SDG Badge';
+        closeButton.innerHTML = '×';
+        closeButton.addEventListener('click', (e) => {
+            console.log('Close button clicked');
+            e.preventDefault();
+            e.stopPropagation();
+            this.hideWidget();
+        });
+        
+        // Add mode indicator
+        const modeIndicator = document.createElement('div');
+        modeIndicator.className = 'sdg-mode-indicator';
+        modeIndicator.textContent = this.currentMode === 'select' ? 'Select Mode' : 'Page Mode';
+        
+        // Add content container with loading state
+        const contentContainer = document.createElement('div');
+        contentContainer.className = 'sdg-widget-content';
+        contentContainer.innerHTML = `
+            <div class="sdg-widget-loading">
+                <div class="sdg-loading-spinner"></div>
+                <div class="sdg-loading-text">Analyzing content...</div>
             </div>
-            <div class="sdg-mode-indicator">${this.currentMode === 'select' ? 'Select Mode' : 'Page Mode'}</div>
         `;
-
-        // Add event listeners
-        const closeButton = this.widget.querySelector('.sdg-widget-close');
-        if (closeButton) {
-            closeButton.addEventListener('click', (e) => {
-                console.log('Close button clicked');
-                e.preventDefault();
-                e.stopPropagation();
-                this.hideWidget();
-            });
-        }
+        
+        this.widget.appendChild(closeButton);
+        this.widget.appendChild(contentContainer);
+        this.widget.appendChild(modeIndicator);
 
         // Make widget draggable
         this.makeDraggable();
@@ -222,6 +233,16 @@ class SDGBadgeWidget {
         if (this.widget) {
             this.widget.style.width = this.badgeSize + 'px';
             this.widget.style.height = this.badgeSize + 'px';
+            
+            // Update the data-wheel-height attribute if sdg-wheel exists
+            const sdgWheel = this.widget.querySelector('.sdg-wheel');
+            if (sdgWheel) {
+                sdgWheel.setAttribute('data-wheel-height', (this.badgeSize - 80).toString());
+                // If the widget is already loaded, we need to reload it to apply the new size
+                if (window.sdgWidgetLoaded) {
+                    this.loadOfficialWidgetForFloating();
+                }
+            }
         }
     }
 
@@ -367,23 +388,18 @@ class SDGBadgeWidget {
             if (!content) return;
 
             if (data.predictions && data.predictions.length > 0) {
-                // Create SDG wheel container using official widget.js
-                const wheelContainer = document.createElement('div');
-                wheelContainer.className = 'floating-wheel-container';
-                
                 // Create SDG wheel element (same as popup implementation)
                 const sdgWheel = document.createElement('div');
                 sdgWheel.className = 'sdg-wheel';
                 sdgWheel.setAttribute('data-text', data.text || 'Current content');
                 sdgWheel.setAttribute('data-model', 'aurora-sdg-multi');
-                sdgWheel.setAttribute('data-wheel-height', (this.badgeSize - 60).toString()); // Account for padding
+                sdgWheel.setAttribute('data-wheel-height', (this.badgeSize - 80).toString()); // Account for close button and padding
                 
                 // Attach data to element for official widget
                 sdgWheel.sdgData = data;
                 
-                wheelContainer.appendChild(sdgWheel);
                 content.innerHTML = '';
-                content.appendChild(wheelContainer);
+                content.appendChild(sdgWheel);
                 
                 // Load and execute the official widget script
                 this.loadOfficialWidgetForFloating();
@@ -406,11 +422,34 @@ class SDGBadgeWidget {
             script.onload = () => {
                 window.sdgWidgetLoaded = true;
                 console.log('Official SDG widget loaded for floating mode');
+                // Widget.js will automatically process all .sdg-wheel elements when loaded
             };
             document.head.appendChild(script);
         } else {
-            // Widget already loaded, trigger reinitialization
-            console.log('Official SDG widget already loaded, reinitializing...');
+            // Widget already loaded, we need to manually trigger processing for new elements
+            console.log('Official SDG widget already loaded, processing new elements...');
+            
+            // The widget.js processes elements when it loads, but for dynamically added elements
+            // we need to trigger reprocessing. Since widget.js is an IIFE, we need to reload it
+            // or find another way to process new elements.
+            
+            // For now, we'll remove and re-add the script to trigger reprocessing
+            // This is a simple but effective approach for dynamic content
+            const existingScript = document.querySelector('script[src*="widget.js"]');
+            if (existingScript) {
+                existingScript.remove();
+            }
+            
+            window.sdgWidgetLoaded = false;
+            
+            // Reload the script to process new elements
+            const script = document.createElement('script');
+            script.src = chrome.runtime.getURL('scripts/widget.js');
+            script.onload = () => {
+                window.sdgWidgetLoaded = true;
+                console.log('Official SDG widget reloaded for new elements');
+            };
+            document.head.appendChild(script);
         }
     }
 
@@ -548,22 +587,47 @@ class SDGBadgeWidget {
                 flex-direction: column;
             }
             
-            .sdg-badge-widget * {
-                font-family: inherit;
-            }
-            
-            /* Floating widget specific styles for official SDG wheel */
-            .floating-wheel-container {
-                width: 100%;
-                height: 100%;
+            .sdg-badge-widget .sdg-widget-close {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                width: 25px;
+                height: 25px;
+                border: none;
+                background: rgba(255, 255, 255, 0.9);
+                color: #666;
+                border-radius: 50%;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 20px;
-                box-sizing: border-box;
+                transition: all 0.2s ease;
+                z-index: 10;
             }
             
-            .floating-wheel-container .sdg-wheel {
+            .sdg-badge-widget .sdg-widget-close:hover {
+                background: rgba(255, 255, 255, 1);
+                color: #333;
+                transform: scale(1.1);
+            }
+            
+            .sdg-badge-widget .sdg-mode-indicator {
+                position: absolute;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 10px;
+                font-weight: 500;
+                z-index: 10;
+            }
+            
+            .sdg-badge-widget .sdg-widget-content {
                 width: 100%;
                 height: 100%;
                 display: flex;
@@ -572,13 +636,79 @@ class SDGBadgeWidget {
                 position: relative;
             }
             
-            .floating-wheel-container .sdg-wheel canvas {
+            .sdg-badge-widget .sdg-widget-loading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .sdg-badge-widget .sdg-loading-spinner {
+                width: 30px;
+                height: 30px;
+                border: 3px solid #f3f3f3;
+                border-top: 3px solid #007bff;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin-bottom: 10px;
+            }
+            
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            
+            .sdg-badge-widget .sdg-loading-text {
+                font-size: 12px;
+                color: #666;
+                font-weight: 500;
+            }
+            
+            .sdg-badge-widget .sdg-widget-error {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .sdg-badge-widget .error-icon {
+                font-size: 32px;
+                margin-bottom: 10px;
+            }
+            
+            .sdg-badge-widget .error-text {
+                font-size: 12px;
+                color: #666;
+                font-weight: 500;
+            }
+            
+            .sdg-badge-widget * {
+                font-family: inherit;
+            }
+            
+            /* Floating widget specific styles for official SDG wheel */
+            .sdg-badge-widget .sdg-wheel {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            
+            .sdg-badge-widget .sdg-wheel canvas {
                 max-width: 100%;
                 max-height: 100%;
                 object-fit: contain;
             }
             
-            .floating-wheel-container .sdg-legend {
+            .sdg-badge-widget .sdg-legend {
                 position: absolute;
                 top: 100%;
                 left: 50%;
@@ -596,44 +726,44 @@ class SDGBadgeWidget {
                 margin-top: 10px;
             }
             
-            .floating-wheel-container .sdg-legend h3 {
+            .sdg-badge-widget .sdg-legend h3 {
                 margin: 0 0 10px 0;
                 font-size: 14px;
                 font-weight: 600;
                 color: #333;
             }
             
-            .floating-wheel-container .sdg-legend ul {
+            .sdg-badge-widget .sdg-legend ul {
                 margin: 0;
                 padding: 0;
                 list-style: none;
             }
             
-            .floating-wheel-container .sdg-legend li {
+            .sdg-badge-widget .sdg-legend li {
                 margin: 8px 0;
                 display: flex;
                 align-items: center;
             }
             
-            .floating-wheel-container .sdg-legend img {
+            .sdg-badge-widget .sdg-legend img {
                 width: 20px;
                 height: 20px;
                 margin-right: 8px;
                 border-radius: 3px;
             }
             
-            .floating-wheel-container .sdg-legend p {
+            .sdg-badge-widget .sdg-legend p {
                 margin: 0;
                 font-size: 11px;
                 color: #555;
             }
             
-            .floating-wheel-container .sdg-legend a {
+            .sdg-badge-widget .sdg-legend a {
                 color: #007bff;
                 text-decoration: none;
             }
             
-            .floating-wheel-container .sdg-legend a:hover {
+            .sdg-badge-widget .sdg-legend a:hover {
                 text-decoration: underline;
             }
         `;
