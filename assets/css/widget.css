@@ -1,195 +1,53 @@
+.description {
+  font-size: large;
+  text-align:center;
+}
 
-/* SDG Widget Styling */
+h1 {
+  text-align: center;
+}
+
+h2 {
+  text-align: left;
+}
+
+.centered {
+  text-align: center;
+}
+
+.results-heading {
+  color: #00E9BC!important;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
 .sdg-wheel {
   position: relative;
-  display: inline-block;
-  margin: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 }
 
-.sdg-wheel canvas {
-  border-radius: 50%;
-  transition: transform 0.3s ease;
+.sdg-wheel:hover + .sdg-legend {
+  opacity: 1;
+  background-color: white;
+  color: black;
 }
 
-.sdg-wheel:hover canvas {
-  transform: scale(1.02);
+.sdg-description {
+  display: none;
+  width: 200px;
+  height: 100px;
 }
 
 .sdg-legend {
+  border-radius: 20px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  max-width: 280px;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.sdg-legend h3 {
-  margin: 0 0 15px 0;
+  left: 100px;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.8); /* Black see-through */
+  width: 400px;
+  transition: .5s ease;
+  color: white;
   font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  text-align: center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-.sdg-legend ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sdg-legend li {
-  display: flex;
-  align-items: center;
-  margin: 8px 0;
-  padding: 8px;
-  border-radius: 6px;
-  transition: background 0.2s ease;
-}
-
-.sdg-legend li:hover {
-  background: rgba(0, 123, 255, 0.05);
-}
-
-.sdg-legend a {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-}
-
-.sdg-legend a:hover {
-  color: #007bff;
-}
-
-.sdg-legend img {
-  width: 25px;
-  height: 25px;
-  margin-right: 10px;
-  border-radius: 4px;
-  object-fit: cover;
-  transition: transform 0.2s ease;
-}
-
-.sdg-legend img:hover {
-  transform: scale(1.1);
-}
-
-.sdg-legend p {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.4;
-  color: #555;
-  font-weight: 500;
-}
-
-.sdg-legend div {
-  text-align: center;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-.sdg-legend div a {
-  margin: 0 5px;
-  font-size: 11px;
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.sdg-legend div a:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
-.sdg-legend div img {
-  width: 80px;
-  height: auto;
-  margin: 0 8px;
-  vertical-align: middle;
-  border-radius: 4px;
-  transition: transform 0.2s ease;
-}
-
-.sdg-legend div img:hover {
-  transform: scale(1.05);
-}
-
-/* Animation for wheel appearance */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.sdg-wheel {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .sdg-wheel {
-    margin: 5px;
-  }
-  
-  .sdg-legend {
-    max-width: 240px;
-    padding: 15px;
-  }
-  
-  .sdg-legend h3 {
-    font-size: 13px;
-  }
-  
-  .sdg-legend p {
-    font-size: 11px;
-  }
-  
-  .sdg-legend div img {
-    width: 60px;
-  }
-}
-
-/* Loading state */
-.sdg-wheel.loading canvas {
-  opacity: 0.5;
-}
-
-.sdg-wheel.loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 30px;
-  height: 30px;
-  margin: -15px 0 0 -15px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #007bff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  padding: 10px;
 }
