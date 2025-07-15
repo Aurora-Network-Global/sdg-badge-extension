@@ -133,6 +133,8 @@ body {
     background: #f8f9fa;
     width: 300px;
     min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 .popup-container {
@@ -160,6 +162,77 @@ body {
     font-size: 16px;
     font-weight: 600;
     color: #212529;
+}
+
+.popup-analysis {
+    background: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px;
+}
+
+.analysis-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.analysis-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+}
+
+.refresh-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.refresh-button:hover {
+    background-color: #f8f9fa;
+}
+
+.analysis-content {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.analysis-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+.loading-text {
+    font-size: 14px;
+}
+
+.analysis-wheel {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .popup-content {
@@ -191,6 +264,38 @@ body {
     padding: 2px 8px;
     border-radius: 8px;
     font-weight: 500;
+}
+
+.view-mode-indicator {
+    font-size: 12px;
+    color: #28a745;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.mode-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+}
+
+.mode-select:hover {
+    border-color: #007bff;
+}
+
+.mode-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
 .size-value {

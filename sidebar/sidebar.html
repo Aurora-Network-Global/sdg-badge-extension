@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Badge Sidebar</title>
+    <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+    <div class="sidebar-container">
+        <div class="sidebar-header">
+            <img src="../icons/icon48.png" alt="SDG Badge" class="sidebar-icon">
+            <h1>SDG Analysis</h1>
+            <button id="refresh-sidebar" class="refresh-button" title="Refresh Analysis">🔄</button>
+        </div>
+        
+        <div class="sidebar-analysis">
+            <div class="analysis-content" id="sidebar-analysis-content">
+                <div class="analysis-loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Loading analysis...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar-settings">
+            <div class="setting-group">
+                <label for="sidebar-mode-toggle" class="setting-label">
+                    <span class="label-text">Analysis Mode</span>
+                    <span class="mode-indicator" id="sidebar-mode-indicator">Page Content</span>
+                </label>
+                <div class="toggle-container">
+                    <input type="checkbox" id="sidebar-mode-toggle" class="toggle-input">
+                    <label for="sidebar-mode-toggle" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <div class="toggle-options">
+                        <span class="option-text">Page</span>
+                        <span class="option-text">Select</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label for="sidebar-size-slider" class="setting-label">
+                    <span class="label-text">Widget Size</span>
+                    <span class="size-value" id="sidebar-size-value">250px</span>
+                </label>
+                <input type="range" id="sidebar-size-slider" class="size-slider" min="150" max="400" value="250">
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <p class="attribution">
+                Powered by <a href="https://aurora-sdg.labs.vu.nl/" target="_blank">Aurora SDG</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+</body>
+</html>

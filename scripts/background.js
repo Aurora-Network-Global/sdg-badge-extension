@@ -64,6 +64,10 @@ if (typeof chrome !== 'undefined' && chrome.runtime) {
         } else if (request.action === 'testApi') {
             handleTestApi(request.text, sendResponse);
             return true;
+        } else if (request.action === 'openSidebar') {
+            handleOpenSidebar(sender.tab.id);
+        } else if (request.action === 'closeSidebar') {
+            handleCloseSidebar(sender.tab.id);
         }
     });
 }
@@ -97,6 +101,33 @@ async function handleTestApi(text, sendResponse) {
         sendResponse(result);
     } catch (error) {
         sendResponse({ success: false, error: error.message });
+    }
+}
+
+// Handle opening sidebar
+async function handleOpenSidebar(tabId) {
+    try {
+        if (typeof chrome !== 'undefined' && chrome.sidePanel) {
+            await chrome.sidePanel.open({ tabId: tabId });
+            console.log('Sidebar opened for tab:', tabId);
+        } else {
+            console.log('Side panel API not available');
+        }
+    } catch (error) {
+        console.error('Error opening sidebar:', error);
+    }
+}
+
+// Handle closing sidebar
+async function handleCloseSidebar(tabId) {
+    try {
+        if (typeof chrome !== 'undefined' && chrome.sidePanel) {
+            // Note: Chrome doesn't have a direct close method, 
+            // but we can disable it or handle it differently
+            console.log('Sidebar close requested for tab:', tabId);
+        }
+    } catch (error) {
+        console.error('Error closing sidebar:', error);
     }
 }
 
@@ -169,8 +200,9 @@ function initializeExtension() {
     
     // Set default settings if not already set
     if (typeof chrome !== 'undefined' && chrome.storage) {
-        chrome.storage.sync.get(['mode', 'badgeSize'], function(result) {
+        chrome.storage.sync.get(['viewMode', 'mode', 'badgeSize'], function(result) {
             const defaults = {
+                viewMode: result.viewMode || 'popup', // Default to popup mode
                 mode: result.mode || 'page',
                 badgeSize: result.badgeSize || 250
             };

@@ -14,7 +14,33 @@
             <h1>SDG Badge Settings</h1>
         </div>
         
+        <div class="popup-analysis" id="popup-analysis" style="display: none;">
+            <div class="analysis-header">
+                <h2>SDG Analysis</h2>
+                <button id="refresh-analysis" class="refresh-button" title="Refresh Analysis">🔄</button>
+            </div>
+            <div class="analysis-content" id="analysis-content">
+                <div class="analysis-loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Loading analysis...</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="popup-content">
+            <div class="setting-group">
+                <label for="view-mode-select" class="setting-label">
+                    <span class="label-text">Display Mode</span>
+                    <span class="view-mode-indicator" id="view-mode-indicator">Popup</span>
+                </label>
+                <select id="view-mode-select" class="mode-select">
+                    <option value="popup">Popup</option>
+                    <option value="floating">Floating Widget</option>
+                    <option value="sidebar">Sidebar Panel</option>
+                </select>
+                <p class="helper-text">Choose how the SDG analysis is displayed</p>
+            </div>
+
             <div class="setting-group">
                 <label for="mode-toggle" class="setting-label">
                     <span class="label-text">Analysis Mode</span>
