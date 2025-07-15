@@ -70,11 +70,11 @@
 .popup-analysis .sdg-legend {
   border-radius: 20px;
   position: absolute;
-  left: 50px; /* Adjusted for popup */
+  left: 100px; /* Adjusted for popup */
   bottom: 0;
   background: rgb(0, 0, 0);
   background: rgba(0, 0, 0, 0.8); /* Black see-through */
-  width: 320px; /* Fits within 420px popup width */
+  width: 420px; /* Fits within 420px popup width */
   transition: .5s ease;
   color: white;
   font-size: 14px;

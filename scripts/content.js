@@ -45,18 +45,21 @@ class SDGBadgeWidget {
     }
 
     setupEventListeners() {
-        // Listen for text selection
+        // Listen for text selection changes (automatic mode switching)
         document.addEventListener('mouseup', () => {
-            if (this.currentMode === 'select') {
-                this.handleTextSelection();
+            this.handleSelectionChange();
+        });
+
+        // Listen for keyboard selection changes (automatic mode switching)
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'End' || e.key === 'Home') {
+                this.handleSelectionChange();
             }
         });
 
-        // Listen for keyboard selection
-        document.addEventListener('keyup', (e) => {
-            if (this.currentMode === 'select' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'End' || e.key === 'Home')) {
-                this.handleTextSelection();
-            }
+        // Listen for selection changes (automatic mode switching)
+        document.addEventListener('selectionchange', () => {
+            this.handleSelectionChange();
         });
 
         // Listen for messages from popup
@@ -229,13 +232,41 @@ class SDGBadgeWidget {
         }
     }
 
-    handleTextSelection() {
+    handleSelectionChange() {
         const selection = window.getSelection();
         const selectedText = selection.toString().trim();
         
-        if (selectedText && selectedText !== this.selectedText && selectedText.length > 10) {
-            this.selectedText = selectedText;
-            this.analyzeText(selectedText);
+        if (selectedText && selectedText.length > 10) {
+            // Text is selected - automatically switch to select mode
+            if (this.currentMode !== 'select') {
+                this.currentMode = 'select';
+                this.updateModeIndicator();
+                this.updatePopupMode('select');
+                console.log('Auto-switched to Select Mode');
+            }
+            
+            // Analyze selected text if it's different from last selection
+            if (selectedText !== this.selectedText) {
+                this.selectedText = selectedText;
+                this.analyzeText(selectedText);
+            }
+        } else {
+            // No text selected - automatically switch to page mode
+            if (this.currentMode !== 'page') {
+                this.currentMode = 'page';
+                this.updateModeIndicator();
+                this.updatePopupMode('page');
+                this.analyzeContent(); // Re-analyze page content
+                console.log('Auto-switched to Page Mode');
+            }
+            this.selectedText = '';
+        }
+    }
+
+    updatePopupMode(mode) {
+        // Update popup mode indicator and save setting
+        if (typeof chrome !== 'undefined' && chrome.storage) {
+            chrome.storage.sync.set({ mode: mode });
         }
     }
 
@@ -336,29 +367,26 @@ class SDGBadgeWidget {
             if (!content) return;
 
             if (data.predictions && data.predictions.length > 0) {
-                // Create a simple SDG display instead of complex widget
-                const sdgDisplay = document.createElement('div');
-                sdgDisplay.className = 'sdg-badge-display';
+                // Create SDG wheel container using official widget.js
+                const wheelContainer = document.createElement('div');
+                wheelContainer.className = 'floating-wheel-container';
                 
-                // Get the top prediction
-                const topPrediction = data.predictions[0];
-                const confidence = Math.round(topPrediction.prediction * 100);
+                // Create SDG wheel element (same as popup implementation)
+                const sdgWheel = document.createElement('div');
+                sdgWheel.className = 'sdg-wheel';
+                sdgWheel.setAttribute('data-text', data.text || 'Current content');
+                sdgWheel.setAttribute('data-model', 'aurora-sdg-multi');
+                sdgWheel.setAttribute('data-wheel-height', (this.badgeSize - 60).toString()); // Account for padding
                 
-                sdgDisplay.innerHTML = `
-                    <div class="sdg-goal-number">SDG ${topPrediction.sdg.code}</div>
-                    <div class="sdg-confidence">
-                        <div class="confidence-label">Confidence</div>
-                        <div class="confidence-value">${confidence}%</div>
-                    </div>
-                    <img src="${chrome.runtime.getURL('assets/img/sdg_icon_' + topPrediction.sdg.code + '.png')}" 
-                         alt="SDG ${topPrediction.sdg.code}" class="sdg-icon">
-                `;
+                // Attach data to element for official widget
+                sdgWheel.sdgData = data;
                 
+                wheelContainer.appendChild(sdgWheel);
                 content.innerHTML = '';
-                content.appendChild(sdgDisplay);
+                content.appendChild(wheelContainer);
                 
-                // Add styles for the display
-                this.addBadgeStyles();
+                // Load and execute the official widget script
+                this.loadOfficialWidgetForFloating();
             } else {
                 content.innerHTML = `
                     <div class="sdg-widget-error">
@@ -370,34 +398,19 @@ class SDGBadgeWidget {
         }
     }
 
-    loadOfficialWidget() {
+    loadOfficialWidgetForFloating() {
         // Load the official widget script if not already loaded
         if (!window.sdgWidgetLoaded) {
             const script = document.createElement('script');
             script.src = chrome.runtime.getURL('scripts/widget.js');
             script.onload = () => {
                 window.sdgWidgetLoaded = true;
-                console.log('Official SDG widget loaded');
-                // Trigger widget initialization after load
-                setTimeout(() => {
-                    this.initializeSDGWheel();
-                }, 100);
+                console.log('Official SDG widget loaded for floating mode');
             };
             document.head.appendChild(script);
         } else {
-            // Widget already loaded, just initialize
-            this.initializeSDGWheel();
-        }
-    }
-
-    initializeSDGWheel() {
-        // Manually trigger the widget initialization for our specific element
-        const sdgWheelElement = this.widget?.querySelector('.sdg-wheel');
-        if (sdgWheelElement && window.jQuery) {
-            // Force the widget to process our element
-            console.log('Initializing SDG wheel for element:', sdgWheelElement);
-            // The widget.js script should automatically process .sdg-wheel elements
-            // but we may need to trigger it manually
+            // Widget already loaded, trigger reinitialization
+            console.log('Official SDG widget already loaded, reinitializing...');
         }
     }
 
@@ -537,6 +550,91 @@ class SDGBadgeWidget {
             
             .sdg-badge-widget * {
                 font-family: inherit;
+            }
+            
+            /* Floating widget specific styles for official SDG wheel */
+            .floating-wheel-container {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            
+            .floating-wheel-container .sdg-wheel {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+            
+            .floating-wheel-container .sdg-wheel canvas {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+            
+            .floating-wheel-container .sdg-legend {
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 300px;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 1000000;
+                font-size: 12px;
+                line-height: 1.4;
+                margin-top: 10px;
+            }
+            
+            .floating-wheel-container .sdg-legend h3 {
+                margin: 0 0 10px 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: #333;
+            }
+            
+            .floating-wheel-container .sdg-legend ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+            
+            .floating-wheel-container .sdg-legend li {
+                margin: 8px 0;
+                display: flex;
+                align-items: center;
+            }
+            
+            .floating-wheel-container .sdg-legend img {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+                border-radius: 3px;
+            }
+            
+            .floating-wheel-container .sdg-legend p {
+                margin: 0;
+                font-size: 11px;
+                color: #555;
+            }
+            
+            .floating-wheel-container .sdg-legend a {
+                color: #007bff;
+                text-decoration: none;
+            }
+            
+            .floating-wheel-container .sdg-legend a:hover {
+                text-decoration: underline;
             }
         `;
         

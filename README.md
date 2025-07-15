@@ -14,6 +14,8 @@ A cross-browser extension that displays SDG (Sustainable Development Goals) clas
 - **Rate Limiting**: Complies with Aurora SDG API rate limits (5 requests/second)
 - **Visual Feedback**: Loading states, error handling, and confidence scores
 
+![screenshot of the popup extenstion + settings](./sdg-badge-extension-screenshot.png)
+
 ## Installation
 
 ### Chrome/Edge (Manifest V3)

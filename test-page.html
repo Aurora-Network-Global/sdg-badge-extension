@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Badge Extension Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .content-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .selection-test {
+            background: #e3f2fd;
+            padding: 15px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SDG Badge Extension Test Page</h1>
+        
+        <div class="content-section">
+            <h2>Climate Action and Environmental Sustainability</h2>
+            <p>Climate change represents one of the most pressing challenges of our time. The need for urgent action to combat climate change and its impacts is recognized globally. Sustainable development practices must be implemented across all sectors to ensure environmental protection while promoting economic growth.</p>
+            
+            <p>Renewable energy sources such as solar, wind, and hydroelectric power are crucial for reducing greenhouse gas emissions. The transition to clean energy not only helps combat climate change but also creates new employment opportunities and promotes sustainable economic development.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Quality Education and Gender Equality</h2>
+            <p>Education is a fundamental human right and a key driver of sustainable development. Ensuring inclusive and equitable quality education for all is essential for building peaceful and sustainable societies. Quality education empowers individuals and communities to make informed decisions and contribute to social and economic development.</p>
+            
+            <p>Gender equality is not only a fundamental human right but also a necessary foundation for a peaceful, prosperous, and sustainable world. Empowering women and girls has a multiplier effect and helps drive up economic growth and development across all areas.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Poverty Eradication and Economic Growth</h2>
+            <p>Ending poverty in all its forms everywhere remains one of the greatest challenges facing humanity. Poverty eradication requires sustained economic growth, social development, and environmental protection. Creating decent work opportunities and promoting inclusive economic growth are essential for reducing poverty and inequality.</p>
+            
+            <p>Sustainable economic growth must be inclusive and provide opportunities for all. This includes promoting entrepreneurship, innovation, and access to financial services, particularly for marginalized communities and small businesses.</p>
+        </div>
+
+        <div class="selection-test">
+            <h3>🔍 Testing Instructions:</h3>
+            <ol>
+                <li><strong>Load the Extension:</strong> Go to chrome://extensions/, enable Developer mode, and click "Load unpacked" to load the extension from /home/ubuntu/sdg-badge-extension/</li>
+                <li><strong>Test Popup Mode:</strong> Click the extension icon to open the popup (should be 500px wide)</li>
+                <li><strong>Test Floating Mode:</strong> Change to floating mode in the popup settings</li>
+                <li><strong>Test Auto Mode Switching:</strong> Select text on this page to see automatic switch to "Select Mode", then deselect to return to "Page Mode"</li>
+                <li><strong>Test Sidebar Mode:</strong> Switch to sidebar mode in the popup</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>Select This Text to Test Auto Mode Switching</h2>
+            <p class="highlight">This paragraph contains content specifically about sustainable development goals. Select this text to test the automatic mode switching feature. The extension should automatically switch to "Select Mode" when you select this text and analyze it for SDG classifications.</p>
+            
+            <p>When you deselect the text, the extension should automatically switch back to "Page Mode" and analyze the entire page content instead of just the selected text.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Additional SDG Content</h2>
+            <p>Clean water and sanitation, affordable and clean energy, decent work and economic growth, industry innovation and infrastructure, reduced inequalities, sustainable cities and communities, responsible consumption and production, life below water, life on land, peace justice and strong institutions, and partnerships for the goals are all interconnected sustainable development objectives.</p>
+        </div>
+    </div>
+</body>
+</html>
